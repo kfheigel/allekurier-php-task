@@ -1,1 +1,5 @@
 .DS_Store
+/var/
+/vendor/
+/mysql/
+.phpunit.result.cache
