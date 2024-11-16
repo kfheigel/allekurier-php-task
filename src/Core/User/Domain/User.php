@@ -7,30 +7,22 @@ namespace App\Core\User\Domain;
 use App\Common\EventManager\EventsCollectorTrait;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="users")
- */
+#[ORM\Entity]
+#[ORM\Table(name: "users")]
 class User
 {
     use EventsCollectorTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer", options={"unsigned"=true}, nullable=false)
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private ?int $id;
+    #[ORM\Id]
+    #[ORM\Column(type: "integer", options: ["unsigned" => true], nullable: false)]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=300, nullable=false)
-     */
+    #[ORM\Column(type: "string", length: 300, nullable: false)]
     private string $email;
 
-    /**
-     * @ORM\Column(type="boolean", options={"default": true}, nullable=false)
-     */
-    private bool $isUserActive;
+    #[ORM\Column(type: "boolean", options: ["default" => true], nullable: false)]
+    private bool $isUserActive = false;
 
     public function __construct(string $email)
     {
