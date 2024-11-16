@@ -23,8 +23,10 @@ class DoctrineInvoiceRepository implements InvoiceRepositoryInterface
             ->createQueryBuilder()
             ->select('i')
             ->from(Invoice::class, 'i')
-            ->where('i.status = :invoice_status')
+            ->andWhere('i.status = :invoice_status')
+            ->andWhere('i.amount > :invoice_amount')
             ->setParameter(':invoice_status', $invoiceStatus)
+            ->setParameter(':invoice_amount', $amount)
             ->getQuery()
             ->getResult();
     }
