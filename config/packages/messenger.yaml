@@ -2,6 +2,12 @@ framework:
     messenger:
         failure_transport: failed
 
+        default_bus: messenger.bus.default
+        buses:
+            messenger.bus.default:
+                middleware:
+                    - validation
+
         transports:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
             async:

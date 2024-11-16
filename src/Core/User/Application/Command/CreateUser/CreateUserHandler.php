@@ -10,7 +10,7 @@ use App\Core\User\Domain\Repository\UserRepositoryInterface;
 use App\Core\User\Application\Command\CreateUser\CreateUserCommand;
 
 #[AsMessageHandler]
-class CreateUserHandler
+final class CreateUserHandler
 {
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,

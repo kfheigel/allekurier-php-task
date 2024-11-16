@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Core\Invoice\UserInterface\Cli;
 
-use App\Core\Invoice\Application\Command\CreateInvoice\CreateInvoiceCommand;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Exception;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use App\Core\Invoice\Application\Command\CreateInvoice\CreateInvoiceCommand;
 
 #[AsCommand(
     name: 'app:invoice:create',
@@ -25,10 +26,17 @@ class CreateInvoice extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->bus->dispatch(new CreateInvoiceCommand(
+        $createInvoiceCommand = new CreateInvoiceCommand(
             $input->getArgument('email'),
             (int) $input->getArgument('amount')
-        ));
+        );
+
+        try {
+            $this->bus->dispatch($createInvoiceCommand);
+        } catch (Exception $e) {
+            $output->writeln('<error>Invoice creation failed - Provided Email is inactive or User does not exists</error>');
+            return Command::FAILURE;
+        }
 
         $output->writeln('<info>Invoice has been successfully created.</info>');
 

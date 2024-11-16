@@ -19,7 +19,7 @@ class User
     #[ORM\GeneratedValue(strategy: "AUTO")]
     private ?int $id = null;
 
-    #[ORM\Column(type: "string", length: 300, nullable: false)]
+    #[ORM\Column(type: "string", length: 300, unique: true, nullable: false)]
     private string $email;
 
     #[ORM\Column(type: "boolean", options: ["default" => true], nullable: false)]
