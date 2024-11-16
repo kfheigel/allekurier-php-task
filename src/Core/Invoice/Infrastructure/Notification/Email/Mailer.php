@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Invoice\Infrastructure\Notification\Email;
 
 use App\Common\Mailer\SMPTMailer;

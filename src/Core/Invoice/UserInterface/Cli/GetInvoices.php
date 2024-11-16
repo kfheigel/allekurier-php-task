@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Invoice\UserInterface\Cli;
 
 use App\Common\Bus\QueryBusInterface;
@@ -13,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
     name: 'app:invoice:get-by-status-and-amount',
-    description: 'Pobieranie identyfikatorów faktur dla wybranego statusu i kwot większych od'
+    description: 'Getting invoices id for a specific status and minimum amount'
 )]
 class GetInvoices extends Command
 {
@@ -25,12 +27,12 @@ class GetInvoices extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $invoices = $this->bus->dispatch(new GetInvoicesByStatusAndAmountGreaterQuery(
-            $input->getArgument('amount')
+            (int) $input->getArgument('amount')
         ));
 
         /** @var InvoiceDTO $invoice */
         foreach ($invoices as $invoice) {
-            $output->writeln($invoice->id);
+            $output->writeln((string) $invoice->id);
         }
 
         return Command::SUCCESS;
@@ -38,7 +40,7 @@ class GetInvoices extends Command
 
     protected function configure(): void
     {
-        $this->addArgument('status', InputArgument::REQUIRED);
-        $this->addArgument('amount', InputArgument::REQUIRED);
+        $this->addArgument('status', InputArgument::REQUIRED, 'The status of the invoices');
+        $this->addArgument('amount', InputArgument::REQUIRED, 'The minimum amount of the invoices (integer value)');
     }
 }
