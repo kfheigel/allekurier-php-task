@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Core\User\Domain;
 
-use App\Common\EventManager\EventsCollectorTrait;
 use Doctrine\ORM\Mapping as ORM;
+use App\Core\User\Domain\Event\UserCreatedEvent;
+use App\Common\EventManager\EventsCollectorTrait;
 
 #[ORM\Entity]
 #[ORM\Table(name: "users")]
@@ -29,6 +30,9 @@ class User
         $this->id = null;
         $this->email = $email;
         $this->isUserActive = false;
+        
+        $this->record(new UserCreatedEvent($this));
+
     }
 
     public function getEmail(): string

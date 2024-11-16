@@ -18,8 +18,8 @@ class SendEmailInvoiceCreatedEventSubscriberListener implements EventSubscriberI
     {
         $this->mailer->sendEmail(
             $event->invoice->getUser()->getEmail(),
-            'Utworzono fakturę',
-            'Dla twojego konta została wystawiona faktura'
+            'Invoice created',
+            'Invoice has been created for your account'
         );
     }
 
