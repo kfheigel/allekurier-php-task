@@ -12,3 +12,6 @@ down:
 
 bash:
 	docker exec -it ak_invoice_php /bin/bash
+	
+db-bash:
+	docker exec -it ak_invoice_mysql /bin/bash
