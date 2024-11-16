@@ -11,7 +11,7 @@ use App\Core\Invoice\Domain\Status\InvoiceStatus;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-class GetInvoicesByStatusAndAmountGreaterHandler
+final class GetInvoicesByStatusAndAmountGreaterFinder
 {
     public function __construct(
         private readonly InvoiceRepositoryInterface $invoiceRepository

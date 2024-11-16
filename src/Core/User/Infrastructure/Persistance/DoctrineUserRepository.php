@@ -29,8 +29,7 @@ class DoctrineUserRepository implements UserRepositoryInterface
             ->select('u')
             ->from(User::class, 'u')
             ->where('u.email = :user_email')
-            ->setParameter(':user_email', $email)
-            ->setMaxResults(1)
+            ->setParameter('user_email', $email)
             ->getQuery()
             ->getOneOrNullResult();
 
@@ -39,6 +38,17 @@ class DoctrineUserRepository implements UserRepositoryInterface
         }
 
         return $user;
+    }
+
+    public function findAllWithInactiveStatus(): array
+    {
+        return $this->entityManager->createQueryBuilder()
+            ->select('u')
+            ->from(User::class, 'u')
+            ->where('u.isUserActive = :is_user_active')
+            ->setParameter('is_user_active', false)
+            ->getQuery()
+            ->getResult();
     }
 
     public function save(User $user): void

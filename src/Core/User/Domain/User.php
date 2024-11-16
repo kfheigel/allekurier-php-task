@@ -40,7 +40,6 @@ class User
         return $this->email;
     }
 
-
     public function isUserActive(): bool
     {
         return $this->isUserActive;
