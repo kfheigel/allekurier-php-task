@@ -11,12 +11,13 @@ use App\Core\User\Domain\User;
 use App\Tests\Fixtures\UserBuilder;
 use App\Core\Invoice\Domain\Invoice;
 use App\Tests\Fixtures\InvoiceBuilder;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use App\Core\User\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use App\Core\Invoice\Domain\Repository\InvoiceRepositoryInterface;
 
-abstract class UnitTestCase extends KernelTestCase
+abstract class IntegrationTestCase extends KernelTestCase
 {
     use PrepareRepositoryInMemoryTrait;
 
@@ -24,6 +25,7 @@ abstract class UnitTestCase extends KernelTestCase
     protected Generator $faker;
     protected UserRepositoryInterface $userRepository;
     protected InvoiceRepositoryInterface $invoiceRepository;
+    protected MessageBusInterface $commandBus;
 
     protected function setUp(): void
     {
@@ -39,6 +41,10 @@ abstract class UnitTestCase extends KernelTestCase
         $invoiceRepository = $this->container->get(InvoiceRepositoryInterface::class);
         Assert::assertInstanceOf(InvoiceRepositoryInterface::class, $invoiceRepository);
         $this->invoiceRepository = $invoiceRepository;
+
+        $commandBus = $this->container->get(MessageBusInterface::class);
+        Assert::assertInstanceOf(MessageBusInterface::class, $commandBus);
+        $this->commandBus = $commandBus;
 
         $this->faker = Factory::create();
     }

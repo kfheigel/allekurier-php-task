@@ -2,27 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Core\Invoice\Application\Command\CreateInvoice;
+namespace App\Tests\Integration\Core\Invoice\Application\Command\CreateInvoice;
 
-use App\Tests\Common\UnitTestCase;
+use App\Tests\Common\IntegrationTestCase;
 use App\Core\Invoice\Domain\Status\InvoiceStatus;
-use App\Core\Invoice\Domain\Exception\InvoiceException;
-use App\Core\User\Domain\Exception\UserNotFoundException;
+use Symfony\Component\Messenger\Exception\ValidationFailedException;
 use App\Core\Invoice\Application\Command\CreateInvoice\CreateInvoiceCommand;
-use App\Core\Invoice\Application\Command\CreateInvoice\CreateInvoiceHandler;
 
-class CreateInvoiceHandlerTest extends UnitTestCase
+class CreateInvoiceHandlerTest extends IntegrationTestCase
 {
-    private CreateInvoiceHandler $handler;
-
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->handler = new CreateInvoiceHandler(
-            $this->invoiceRepository,
-            $this->userRepository
-        );
     }
 
     public function test_handle_success(): void
@@ -37,7 +28,7 @@ class CreateInvoiceHandlerTest extends UnitTestCase
        $command = new CreateInvoiceCommand($givenEmail, 12500);
 
        // when
-       $this->handler->__invoke($command);
+       $this->commandBus->dispatch($command);
 
        // then
        $invoices = $this->invoiceRepository->getInvoicesWithGreaterAmountAndStatus(
@@ -58,26 +49,26 @@ class CreateInvoiceHandlerTest extends UnitTestCase
         $command = new CreateInvoiceCommand('nonexistent@test.pl', 12500);
 
         // expect
-        $this->expectException(UserNotFoundException::class);
+        $this->expectException(ValidationFailedException::class);
 
         // when
-        $this->handler->__invoke($command);
+        $this->commandBus->dispatch($command);
     }
 
-    public function test_handle_invoice_invalid_amount(): void
+    public function test_handle_user_not_active(): void
     {
-        // given 
+        // given  
         $givenEmail = $this->faker->email();
         $this->giveUser(
             email: $givenEmail,
-            isUserActive: true
-        );
-        $command = new CreateInvoiceCommand($givenEmail, -5);
+            isUserActive: false
+        );      
+        $command = new CreateInvoiceCommand($givenEmail, 12500);
 
         // expect
-        $this->expectException(InvoiceException::class);
+        $this->expectException(ValidationFailedException::class);
 
         // when
-        $this->handler->__invoke($command);
+        $this->commandBus->dispatch($command);
     }
 }
