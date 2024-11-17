@@ -4,23 +4,15 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Core\Invoice\Application\Command\CreateInvoice;
 
+use App\Tests\Common\UnitTestCase;
+use App\Core\Invoice\Domain\Status\InvoiceStatus;
+use App\Core\Invoice\Domain\Exception\InvoiceException;
+use App\Core\User\Domain\Exception\UserNotFoundException;
 use App\Core\Invoice\Application\Command\CreateInvoice\CreateInvoiceCommand;
 use App\Core\Invoice\Application\Command\CreateInvoice\CreateInvoiceHandler;
-use App\Core\Invoice\Domain\Exception\InvoiceException;
-use App\Core\Invoice\Domain\Invoice;
-use App\Core\Invoice\Domain\Repository\InvoiceRepositoryInterface;
-use App\Core\User\Domain\Exception\UserNotFoundException;
-use App\Core\User\Domain\Repository\UserRepositoryInterface;
-use App\Core\User\Domain\User;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 
-class CreateInvoiceHandlerTest extends TestCase
+class CreateInvoiceHandlerTest extends UnitTestCase
 {
-    private UserRepositoryInterface|MockObject $userRepository;
-
-    private InvoiceRepositoryInterface|MockObject $invoiceRepository;
-
     private CreateInvoiceHandler $handler;
 
     protected function setUp(): void
@@ -28,52 +20,59 @@ class CreateInvoiceHandlerTest extends TestCase
         parent::setUp();
 
         $this->handler = new CreateInvoiceHandler(
-            $this->invoiceRepository = $this->createMock(
-                InvoiceRepositoryInterface::class
-            ),
-            $this->userRepository = $this->createMock(
-                UserRepositoryInterface::class
-            )
+            $this->invoiceRepository,
+            $this->userRepository
         );
     }
 
     public function test_handle_success(): void
     {
-        $user = $this->createMock(User::class);
+       // given
+       $givenEmail = $this->faker->email();
+       $user = $this->giveUser(
+           email: $givenEmail,
+           isUserActive: true
+       );
 
-        $invoice = new Invoice(
-            $user, 12500
-        );
+       $command = new CreateInvoiceCommand($givenEmail, 12500);
 
-        $this->userRepository->expects(self::once())
-            ->method('getByEmail')
-            ->willReturn($user);
+       // when
+       $this->handler->__invoke($command);
 
-        $this->invoiceRepository->expects(self::once())
-            ->method('save')
-            ->with($invoice);
+       // then
+       $invoices = $this->invoiceRepository->getInvoicesWithGreaterAmountAndStatus(
+        amount: 12000,
+        invoiceStatus: InvoiceStatus::NEW
+       );
 
-        $this->invoiceRepository->expects(self::once())
-            ->method('flush');
-
-        $this->handler->__invoke((new CreateInvoiceCommand('test@test.pl', 12500)));
+       self::assertNotNull($invoices);
+       self::assertCount(1, count($invoices);
+       
+       self::assertSame(12500, $invoices[0]->getAmount());
+       self::assertSame($user, $invoices[0]->getUser());
     }
 
     public function test_handle_user_not_exists(): void
     {
         $this->expectException(UserNotFoundException::class);
 
-        $this->userRepository->expects(self::once())
-            ->method('getByEmail')
-            ->willThrowException(new UserNotFoundException());
+        $command = new CreateInvoiceCommand('nonexistent@test.pl', 12500);
 
-        $this->handler->__invoke((new CreateInvoiceCommand('test@test.pl', 12500)));
+        $this->handler->__invoke($command);
     }
 
     public function test_handle_invoice_invalid_amount(): void
     {
         $this->expectException(InvoiceException::class);
 
-        $this->handler->__invoke((new CreateInvoiceCommand('test@test.pl', -5)));
+        $givenEmail = $this->faker->email();
+        $this->giveUser(
+            email: $givenEmail,
+            isUserActive: true
+        );
+
+        $command = new CreateInvoiceCommand($givenEmail, -5);
+
+        $this->handler->__invoke($command);
     }
 }

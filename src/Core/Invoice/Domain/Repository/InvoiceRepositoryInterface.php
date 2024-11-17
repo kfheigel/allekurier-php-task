@@ -13,7 +13,7 @@ interface InvoiceRepositoryInterface
      * @return Invoice[]
      */
     public function getInvoicesWithGreaterAmountAndStatus(int $amount, InvoiceStatus $invoiceStatus): array;
-
+    
     public function save(Invoice $invoice): void;
 
     public function flush(): void;

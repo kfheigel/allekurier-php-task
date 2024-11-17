@@ -22,12 +22,12 @@ final class InvoiceInMemoryRepository implements InvoiceRepositoryInterface
      */
     public function getInvoicesWithGreaterAmountAndStatus(int $amount, InvoiceStatus $invoiceStatus): array
     {
-        return array_filter(
+        return array_values(array_filter(
             $this->entities,
             function (Invoice $invoice) use ($amount, $invoiceStatus) {
                 return $invoice->getStatus() === $invoiceStatus && $invoice->getAmount() > $amount;
             }
-        );
+        ));
     }
 
     public function flush(): void
