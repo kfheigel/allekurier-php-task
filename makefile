@@ -1,4 +1,4 @@
-run: build up
+run: build up cache-clear
 
 test: bin/phpunit tests/Unit/
 
@@ -16,3 +16,6 @@ bash:
 	
 db-bash:
 	docker exec -it ak_invoice_mysql /bin/bash
+
+cache-clear:
+	docker exec -it ak_invoice_php bin/console cache:clear

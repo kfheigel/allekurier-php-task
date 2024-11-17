@@ -14,7 +14,7 @@ final class UserInMemoryRepository implements UserRepositoryInterface
 
     public function save(User $user): void
     {
-        $this->entities[$user->getId()] = $user;
+        $this->entities[random_int(0,999999)] = $user;
     }
 
     /**
