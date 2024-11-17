@@ -56,4 +56,4 @@ WORKDIR /var/www/html
 
 # wait-for-it czeka na wystartowanie mysql aby zrobic migracje
 # apache2-foreground odpala apache
-CMD composer install ; wait-for-it mysql:3306 -t 120 -- bin/console doctrine:migrations:migrate -n ; apache2-foreground
+CMD ["/bin/bash", "-c", "composer install && wait-for-it mysql:3306 -t 120 -- bin/console doctrine:migrations:migrate -n && apache2-foreground"]

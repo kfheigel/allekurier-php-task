@@ -26,8 +26,13 @@ final class IsUserActiveValidator extends ConstraintValidator
             return;
         }
 
-        $user = $this->userRepository->getByEmail($value);
+        /** @var User $user */
+        $user = $this->userRepository->findByEmail($value);
 
+        if (null === $user) {
+            return;
+        }
+        
         /** @var string $value */
         if (!$user->isUserActive()) {
             $this->context->buildViolation($constraint->message)

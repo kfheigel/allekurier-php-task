@@ -27,7 +27,7 @@ final class IsUserExistsValidator extends ConstraintValidator
         }
 
         /** @var string $value */
-        if (empty($this->userRepository->getByEmail($value))) {
+        if (!$this->userRepository->findByEmail($value)) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ string }}', $value)
                 ->setCode($constraint->violationCode)

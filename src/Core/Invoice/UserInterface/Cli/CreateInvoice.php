@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Core\Invoice\UserInterface\Cli;
 
-use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Messenger\Exception\ValidationFailedException;
 use App\Core\Invoice\Application\Command\CreateInvoice\CreateInvoiceCommand;
 
 #[AsCommand(
@@ -33,8 +33,13 @@ class CreateInvoice extends Command
 
         try {
             $this->bus->dispatch($createInvoiceCommand);
-        } catch (Exception $e) {
-            $output->writeln('<error>Invoice creation failed - Provided Email is inactive or User does not exists</error>');
+        } catch (ValidationFailedException $e) {
+            $output->writeln('<error>Validation failed for CreateInvoiceCommand. Please provide correct data.</error>');
+
+            foreach ($e->getViolations() as $violation) {
+                $output->writeln('<error>' . $violation->getPropertyPath() . ': ' . $violation->getMessage() . '</error>');
+            }
+    
             return Command::FAILURE;
         }
 

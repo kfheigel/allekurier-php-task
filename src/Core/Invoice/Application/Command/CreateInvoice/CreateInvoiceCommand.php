@@ -10,8 +10,8 @@ use App\Core\Invoice\Domain\Validator\UserActive\IsUserActive;
 final readonly class CreateInvoiceCommand
 {
     public function __construct(
-        #[IsUserExists(code: 404)]
         #[IsUserActive(code: 400)]
+        #[IsUserExists(code: 404)]
         public readonly string $email,
         public readonly int $amount
     ) {

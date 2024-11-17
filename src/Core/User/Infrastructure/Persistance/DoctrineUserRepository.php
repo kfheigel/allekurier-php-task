@@ -6,7 +6,6 @@ namespace App\Core\User\Infrastructure\Persistance;
 
 use App\Core\User\Domain\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\NonUniqueResultException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use App\Core\User\Domain\Exception\UserNotFoundException;
 use App\Core\User\Domain\Repository\UserRepositoryInterface;
@@ -16,14 +15,21 @@ class DoctrineUserRepository implements UserRepositoryInterface
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly EventDispatcherInterface $eventDispatcher
-        )
-    {
+    ) { 
     }
 
-    /**
-     * @throws NonUniqueResultException
-     */
     public function getByEmail(string $email): User
+    {
+        $user = $this->findByEmail($email);
+
+        if (null === $user) {
+            throw new UserNotFoundException('User not existing');
+        }
+
+        return $user;
+    }
+
+    public function findByEmail(string $email): ?User
     {
         $user = $this->entityManager->createQueryBuilder()
             ->select('u')
@@ -32,10 +38,6 @@ class DoctrineUserRepository implements UserRepositoryInterface
             ->setParameter('user_email', $email)
             ->getQuery()
             ->getOneOrNullResult();
-
-        if (null === $user) {
-            throw new UserNotFoundException('User not existing');
-        }
 
         return $user;
     }

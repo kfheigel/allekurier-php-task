@@ -1,4 +1,5 @@
 run: build up
+
 test: bin/phpunit tests/Unit/
 
 build:

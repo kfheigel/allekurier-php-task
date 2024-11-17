@@ -67,4 +67,9 @@ class Invoice
     {
         return $this->amount;
     }
+
+    public function getStatus(): InvoiceStatus
+    {
+        return $this->status;
+    }
 }
