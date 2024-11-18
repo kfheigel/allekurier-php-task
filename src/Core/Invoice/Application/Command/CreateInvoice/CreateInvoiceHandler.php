@@ -15,10 +15,11 @@ final class CreateInvoiceHandler
     public function __construct(
         private readonly InvoiceRepositoryInterface $invoiceRepository,
         private readonly UserRepositoryInterface $userRepository
-    ) {}
+    ) {
+    }
 
     public function __invoke(CreateInvoiceCommand $command): void
-    {   
+    {
         $this->invoiceRepository->save(new Invoice(
             $this->userRepository->getByEmail($command->email),
             $command->amount

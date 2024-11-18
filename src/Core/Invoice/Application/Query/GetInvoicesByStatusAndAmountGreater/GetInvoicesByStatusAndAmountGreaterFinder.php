@@ -15,7 +15,8 @@ final class GetInvoicesByStatusAndAmountGreaterFinder
 {
     public function __construct(
         private readonly InvoiceRepositoryInterface $invoiceRepository
-    ) {}
+    ) {
+    }
 
     public function __invoke(GetInvoicesByStatusAndAmountGreaterQuery $query): array
     {

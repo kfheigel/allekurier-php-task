@@ -1,7 +1,5 @@
 run: build up cache-clear
 
-test: bin/phpunit tests/Unit/
-
 build:
 	docker-compose build
 
@@ -19,3 +17,20 @@ db-bash:
 
 cache-clear:
 	docker exec -it ak_invoice_php bin/console cache:clear
+
+test: phpcs unit-tests integration-tests
+
+unit-tests:
+	docker exec -it ak_invoice_php vendor/bin/phpunit -c phpunit.xml --testdox --testsuite unit
+
+integration-tests:
+	docker exec -it ak_invoice_php vendor/bin/phpunit -c phpunit.xml --testdox --testsuite integration
+
+phpstan-run:
+	docker exec -it ak_invoice_php vendor/bin/phpstan analyse -c phpstan.neon
+
+phpcs:
+	docker exec -it ak_invoice_php vendor/bin/phpcs
+
+phpcs-fix:
+	docker exec -it ak_invoice_php vendor/bin/phpcbf

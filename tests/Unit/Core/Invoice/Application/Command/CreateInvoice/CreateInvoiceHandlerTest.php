@@ -11,7 +11,7 @@ use App\Core\User\Domain\Exception\UserNotFoundException;
 use App\Core\Invoice\Application\Command\CreateInvoice\CreateInvoiceCommand;
 use App\Core\Invoice\Application\Command\CreateInvoice\CreateInvoiceHandler;
 
-class CreateInvoiceHandlerTest extends UnitTestCase
+final class CreateInvoiceHandlerTest extends UnitTestCase
 {
     private CreateInvoiceHandler $handler;
 
@@ -45,9 +45,7 @@ class CreateInvoiceHandlerTest extends UnitTestCase
         invoiceStatus: InvoiceStatus::NEW
        );
 
-       self::assertNotNull($invoices);
        self::assertCount(1, $invoices);
-       
        self::assertSame(12500, $invoices[0]->getAmount());
        self::assertSame($user, $invoices[0]->getUser());
     }

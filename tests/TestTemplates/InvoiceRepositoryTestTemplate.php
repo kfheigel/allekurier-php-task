@@ -26,7 +26,6 @@ abstract class InvoiceRepositoryTestTemplate extends UnitTestCase
 
         // when
         $invoice = $this->repository()->getInvoicesWithGreaterAmountAndStatus($givenLessAmount, InvoiceStatus::NEW);
-        $this->assertNotNull($invoice);
 
         // then
         self::assertEquals($givenInvoice, $invoice[0]);

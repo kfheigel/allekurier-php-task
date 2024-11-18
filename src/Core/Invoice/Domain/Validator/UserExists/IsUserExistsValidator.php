@@ -18,8 +18,8 @@ final class IsUserExistsValidator extends ConstraintValidator
 
     public function validate(mixed $value, Constraint $constraint): void
     {
-        if (!$constraint instanceof isUserExists) {
-            throw new UnexpectedTypeException($constraint, isUserExists::class);
+        if (!$constraint instanceof IsUserExists) {
+            throw new UnexpectedTypeException($constraint, IsUserExists::class);
         }
 
         if (null === $value || '' === $value) {

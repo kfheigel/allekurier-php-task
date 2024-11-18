@@ -15,7 +15,8 @@ class DoctrineInvoiceRepository implements InvoiceRepositoryInterface
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly EventDispatcherInterface $eventDispatcher
-    ) {}
+    ) {
+    }
 
     public function getInvoicesWithGreaterAmountAndStatus(int $amount, InvoiceStatus $invoiceStatus): array
     {

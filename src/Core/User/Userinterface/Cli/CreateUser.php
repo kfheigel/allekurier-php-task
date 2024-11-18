@@ -16,7 +16,7 @@ use App\Core\User\Application\Command\CreateUser\CreateUserCommand;
     name: 'app:user:create',
     description: 'Adding new user'
 )]
-class CreateUser extends Command
+final class CreateUser extends Command
 {
     public function __construct(private readonly MessageBusInterface $bus)
     {

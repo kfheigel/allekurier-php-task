@@ -17,7 +17,7 @@ use App\Core\Invoice\Application\Command\CreateInvoice\CreateInvoiceCommand;
     name: 'app:invoice:create',
     description: 'Adding new invoice'
 )]
-class CreateInvoice extends Command
+final class CreateInvoice extends Command
 {
     public function __construct(private readonly MessageBusInterface $bus)
     {
@@ -26,10 +26,10 @@ class CreateInvoice extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $createInvoiceCommand = new CreateInvoiceCommand(
-            $input->getArgument('email'),
-            (int) $input->getArgument('amount')
-        );
+        $email = (string) $input->getArgument('email');
+        $amount = (int) $input->getArgument('amount');
+
+        $createInvoiceCommand = new CreateInvoiceCommand($email, $amount);
 
         try {
             $this->bus->dispatch($createInvoiceCommand);
@@ -39,7 +39,7 @@ class CreateInvoice extends Command
             foreach ($e->getViolations() as $violation) {
                 $output->writeln('<error>' . $violation->getPropertyPath() . ': ' . $violation->getMessage() . '</error>');
             }
-    
+
             return Command::FAILURE;
         }
 

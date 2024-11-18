@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Core\Invoice\Domain\Validator\UserActive;
 
+use App\Core\User\Domain\User;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use App\Core\User\Domain\Repository\UserRepositoryInterface;
@@ -18,8 +19,8 @@ final class IsUserActiveValidator extends ConstraintValidator
 
     public function validate(mixed $value, Constraint $constraint): void
     {
-        if (!$constraint instanceof isUserActive) {
-            throw new UnexpectedTypeException($constraint, isUserActive::class);
+        if (!$constraint instanceof IsUserActive) {
+            throw new UnexpectedTypeException($constraint, IsUserActive::class);
         }
 
         if (null === $value || '' === $value) {
@@ -29,10 +30,10 @@ final class IsUserActiveValidator extends ConstraintValidator
         /** @var User $user */
         $user = $this->userRepository->findByEmail($value);
 
-        if (null === $user) {
+        if (null == $user) {
             return;
         }
-        
+
         /** @var string $value */
         if (!$user->isUserActive()) {
             $this->context->buildViolation($constraint->message)

@@ -6,6 +6,6 @@ namespace App\Core\Invoice\Domain\Exception;
 
 use DomainException;
 
-class InvoiceException extends DomainException
+final class InvoiceException extends DomainException
 {
 }

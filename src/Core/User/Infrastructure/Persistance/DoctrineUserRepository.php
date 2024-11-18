@@ -15,7 +15,7 @@ class DoctrineUserRepository implements UserRepositoryInterface
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly EventDispatcherInterface $eventDispatcher
-    ) { 
+    ) {
     }
 
     public function getByEmail(string $email): User
@@ -39,6 +39,7 @@ class DoctrineUserRepository implements UserRepositoryInterface
             ->getQuery()
             ->getOneOrNullResult();
 
+        /** @var ?User $user */
         return $user;
     }
 

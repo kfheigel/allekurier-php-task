@@ -30,7 +30,7 @@ class User
         $this->id = null;
         $this->email = $email;
         $this->isUserActive = false;
-        
+
         $this->record(new UserCreatedEvent($this));
     }
 

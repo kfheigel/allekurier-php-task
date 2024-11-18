@@ -23,7 +23,6 @@ abstract class UserRepositoryTestTemplate extends UnitTestCase
 
         // when
         $user = $this->repository()->getByEmail($givenUser->getEmail());
-        $this->assertNotNull($user);
 
         // then
         self::assertEquals($givenUser, $user);
@@ -51,7 +50,6 @@ abstract class UserRepositoryTestTemplate extends UnitTestCase
 
         // when
         $user = $this->repository()->findByEmail($givenUser->getEmail());
-        $this->assertNotNull($user);
 
         // then
         self::assertEquals($givenUser, $user);

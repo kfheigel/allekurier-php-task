@@ -10,11 +10,12 @@ use App\Core\User\Domain\Repository\UserRepositoryInterface;
 
 final class UserInMemoryRepository implements UserRepositoryInterface
 {
+    /** @var array<int, User> */
     private array $entities = [];
 
     public function save(User $user): void
     {
-        $this->entities[random_int(0,999999)] = $user;
+        $this->entities[random_int(0, 999999)] = $user;
     }
 
     /**
@@ -22,26 +23,24 @@ final class UserInMemoryRepository implements UserRepositoryInterface
      */
     public function findAllWithInactiveStatus(): array
     {
-        return array_filter(
+        return array_values(array_filter(
             $this->entities,
-            function (User $user) {
+            function (User $user): bool {
                 return !$user->isUserActive();
             }
-        );
+        ));
     }
 
     public function getByEmail(string $email): User
     {
         $user = $this->findByEmail($email);
-    
+
         if ($user !== null) {
             return $user;
         }
-    
+
         throw new UserNotFoundException('User not existing');
     }
-
-    
 
     public function findByEmail(string $email): ?User
     {
@@ -50,7 +49,7 @@ final class UserInMemoryRepository implements UserRepositoryInterface
                 return $user;
             }
         }
-    
+
         return null;
     }
 

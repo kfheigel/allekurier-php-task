@@ -16,7 +16,7 @@ use App\Core\User\Application\Query\GetInactiveUsersEmailQuery;
     name: 'app:user:get-by-inactive',
     description: 'Collect inactive users email'
 )]
-class GetInactiveUsersEmail extends Command
+final class GetInactiveUsersEmail extends Command
 {
     public function __construct(private readonly QueryBusInterface $bus)
     {
@@ -26,7 +26,7 @@ class GetInactiveUsersEmail extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $emails = $this->bus->dispatch(new GetInactiveUsersEmailQuery());
-        
+
         /** @var User $user */
         foreach ($emails as $email) {
             $output->writeln($email);

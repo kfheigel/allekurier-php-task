@@ -13,7 +13,8 @@ final class GetInactiveUsersEmailFinder
 {
     public function __construct(
         private readonly UserRepositoryInterface $userRepository
-    ) {}
+    ) {
+    }
 
     public function __invoke(GetInactiveUsersEmailQuery $query): array
     {

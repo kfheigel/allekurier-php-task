@@ -9,7 +9,7 @@ use App\Core\Invoice\Domain\Status\InvoiceStatus;
 use Symfony\Component\Messenger\Exception\ValidationFailedException;
 use App\Core\Invoice\Application\Command\CreateInvoice\CreateInvoiceCommand;
 
-class CreateInvoiceHandlerTest extends IntegrationTestCase
+final class CreateInvoiceHandlerTest extends IntegrationTestCase
 {
     protected function setUp(): void
     {
@@ -36,7 +36,6 @@ class CreateInvoiceHandlerTest extends IntegrationTestCase
         invoiceStatus: InvoiceStatus::NEW
        );
 
-       self::assertNotNull($invoices);
        self::assertCount(1, $invoices);
        
        self::assertSame(12500, $invoices[0]->getAmount());

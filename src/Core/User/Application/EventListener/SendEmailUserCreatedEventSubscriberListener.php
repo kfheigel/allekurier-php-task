@@ -8,7 +8,7 @@ use App\Common\Mailer\MailerInterface;
 use App\Core\User\Domain\Event\UserCreatedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class SendEmailUserCreatedEventSubscriberListener implements EventSubscriberInterface
+final class SendEmailUserCreatedEventSubscriberListener implements EventSubscriberInterface
 {
     public function __construct(private readonly MailerInterface $mailer)
     {

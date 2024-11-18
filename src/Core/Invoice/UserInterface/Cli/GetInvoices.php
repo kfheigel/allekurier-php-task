@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
     name: 'app:invoice:get-by-status-and-amount',
     description: 'Getting invoices id for a specific status and minimum amount'
 )]
-class GetInvoices extends Command
+final class GetInvoices extends Command
 {
     public function __construct(private readonly QueryBusInterface $bus)
     {
@@ -60,9 +60,9 @@ class GetInvoices extends Command
     private function outputInvoicesInfo(
         string $status,
         int $amount,
-        array $invoices, 
+        array $invoices,
         OutputInterface $output
-        ): void {
+    ): void {
         /** @var InvoiceDTO $invoice */
         $invoiceCount = 0;
         foreach ($invoices as $invoice) {

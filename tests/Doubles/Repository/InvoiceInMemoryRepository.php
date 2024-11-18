@@ -10,6 +10,7 @@ use App\Core\Invoice\Domain\Repository\InvoiceRepositoryInterface;
 
 final class InvoiceInMemoryRepository implements InvoiceRepositoryInterface
 {
+    /** @var array<int|string, Invoice> */
     private array $entities = [];
 
     public function save(Invoice $invoice): void
@@ -24,7 +25,7 @@ final class InvoiceInMemoryRepository implements InvoiceRepositoryInterface
     {
         return array_values(array_filter(
             $this->entities,
-            function (Invoice $invoice) use ($amount, $invoiceStatus) {
+            function (Invoice $invoice) use ($amount, $invoiceStatus): bool {
                 return $invoice->getStatus() === $invoiceStatus && $invoice->getAmount() > $amount;
             }
         ));

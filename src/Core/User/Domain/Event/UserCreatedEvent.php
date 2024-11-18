@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace App\Core\User\Domain\Event;
 
-class UserCreatedEvent extends AbstractUserEvent
-{   
+final class UserCreatedEvent extends AbstractUserEvent
+{
 }
