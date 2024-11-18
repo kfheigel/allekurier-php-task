@@ -25,16 +25,16 @@ bin/console app:invoice:get-by-status-and-amount new 10000
 Aplikacja posiada konfigurację obrazów dockerowych 
 ```
 # zbudowanie obrazu i uruchomienie kontenera aplikacji
-docker-compose up -d
+make run
 
 # lista uruchomionych kontenerów, na liście jest CONTAINER ID
 docker ps
 
 # wejście do bash kontenera 
-docker exec -it {CONTAINER ID} bash
+make bash
 ```
 
 ### Testy
 ```
-bin/phpunit tests/Unit/
+make test
 ```
