@@ -27,7 +27,6 @@ final class GetInactiveUsersEmail extends Command
     {
         $emails = $this->bus->dispatch(new GetInactiveUsersEmailQuery());
 
-        /** @var User $user */
         foreach ($emails as $email) {
             $output->writeln($email);
         }
